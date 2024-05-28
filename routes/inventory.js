@@ -7,6 +7,30 @@ router.get('/', (req,res) =>{
 })
 
 
+// Category Routes
+router.get('/category/:id/create', (req,res) =>{
+    res.send('category Create ' + req.params.id + ' page NOT IMPLEMENTED')
+})
+
+router.get('/category/:id', (req,res) =>{
+    res.send('categories ' + req.params.id + ' page NOT IMPLEMENTED')
+})
+
+router.get('/categories', (req,res) =>{
+    res.send('categories page NOT IMPLEMENTED')
+})
+
+
+// Item Routes 
+router.get('/item/:id', (req,res) =>{
+    res.send('categories ' + req.params.id + ' page NOT IMPLEMENTED')
+})
+
+router.get('/items', (req,res) =>{
+    res.send('Items page NOT IMPLEMENTED')
+})
+
+
 module.exports = router
 
 
