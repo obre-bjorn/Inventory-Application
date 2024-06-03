@@ -1,5 +1,13 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+    h1= title
+    p Welcome to #[em The Inventory], a very basic Express website developed by Obre BJorn
+
+    h2 Dynamic content
+
+    p The inventory has the following record counts:
+
+    ul
+      li #[strong Items:]  !{items_count}
+      li #[strong Categories:] !{category_count}

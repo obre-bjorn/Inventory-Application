@@ -1,25 +1,21 @@
 const express = require("express");
 const router = express.Router()
 
+const category = require('../controllers/categoryController')
+const item = require("../controllers/itemController")
 
-router.get('/', (req,res) =>{
-    res.send('This is the Inventory listing page')
-})
+router.get('/', item.index)
 
 
 // Category Routes
 
-router.get('/category/create', (req,res) =>{
-    res.send('category Create page NOT IMPLEMENTED')
-})
+router.get('/category/create', category.category_create_get)
 
 router.post('/category/create',(req,res) =>{
     res.send("category created")
 })
 
-router.get('/category/:id/update',(req,res)=>{
-    res.send('category update form')
-})
+router.get('/category/:id/update',category.category_update_get)
 router.post('/category/:id/update',(req,res)=>{
     res.send('category updated')
 })
@@ -31,28 +27,19 @@ router.post('/category/:id/delete',(req,res)=>{
     res.send('category deleted')
 })
 
-router.get('/category/:id', (req,res) =>{
-    res.send('categories ' + req.params.id + ' page NOT IMPLEMENTED')
-})
-
-router.get('/categories', (req,res) =>{
-    res.send('categories page NOT IMPLEMENTED')
-})
+router.get('/category/:id', category.category_detail)
+router.get('/categories', category.categories_list)
 
 
 
 // Item Routes 
-router.get('/item/create',(req,res)=>{
-    res.send('Item create form')
-})
+router.get('/item/create',item.item_create_get)
 
 router.post('/item/create',(req,res) =>{
     res.send("item created")
 })
 
-router.get('/item/:id/update',(req,res)=>{
-    res.send('category update form')
-})
+router.get('/item/:id/update',item.item_update_get)
 router.post('/item/:id/update',(req,res)=>{
     res.send('item create form')
 })
@@ -64,13 +51,9 @@ router.post('/item/:id/delete',(req,res)=>{
     res.send('item deleted')
 })
 
-router.get('/item/:id', (req,res) =>{
-    res.send('categories ' + req.params.id + ' page NOT IMPLEMENTED')
-})
+router.get('/item/:id', item.item_detail)
 
-router.get('/items', (req,res) =>{
-    res.send('Items page NOT IMPLEMENTED')
-})
+router.get('/items', item.items_list)
 
 
 module.exports = router
