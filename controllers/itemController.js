@@ -1,4 +1,5 @@
 const asyncHandler = require("express-async-handler")
+const {body, validationResult} = require("express-validator")
 
 const Category = require('../models/category')
 const Item = require('../models/item')
@@ -47,9 +48,61 @@ exports.item_create_get = asyncHandler(async (req,res,next) => {
 
 })
 
-exports.item_create_post = asyncHandler(async (req,res,next) => {
-    res.send("Item Post NOT IMPLEMENTED")
-})
+exports.item_create_post = [
+    body("name", "Name cannot be empty")
+        .trim()
+        .isLength({min: 1})
+        .escape(),
+    body("category",'Cateory is required')
+        .trim()
+        .isLength({min:1})
+        .escape(),
+    body("description", ("A description of the product is required"))
+        .trim()
+        .isLength({min:5})
+        .escape(),
+    body("price")
+        .notEmpty()
+        .withMessage("Price cannot be empty")
+        .isInt({min :1})
+        .withMessage("Price cannot be less than 1"),
+    body("in_stock")
+        .isInt({min:0})
+        .withMessage("Minimum is 0 cannot input a negative  value")
+        
+    ,asyncHandler(async (req,res,next) => {
+        
+        const errors = validationResult(req)
+
+        const item = new Item({
+            name: req.body.name,
+            category: req.body.category,
+            description: req.body.description,
+            price: req.body.price,
+            in_stock: req.body.in_stock
+
+        })
+
+
+        if(!errors.isEmpty()){
+
+            const categories = await Category.find().sort({name:1}).exec()
+
+            res.render("item_form",{
+                title: 'Create new Item',
+                item,
+                categories,
+                errors: errors.array()
+            })
+
+        }else{
+            await item.save()
+            res.redirect(item.url)
+
+        }
+
+
+})]
 
 exports.item_update_get = asyncHandler(async (req,res,next) => {
     const [item, categories] = await Promise.all([
@@ -70,9 +123,59 @@ exports.item_update_get = asyncHandler(async (req,res,next) => {
     })
 })
 
-exports.item_update_post = asyncHandler(async (req,res,next) => {
-    res.send("Item update post NOT IMPLEMENTED")
-})
+exports.item_update_post = [
+    body("name", "Name cannot be empty")
+        .trim()
+        .isLength({min: 1})
+        .escape(),
+    body("category",'Cateory is required')
+        .trim()
+        .isLength({min:1})
+        .escape(),
+    body("description", ("A description of the product is required"))
+        .trim()
+        .isLength({min:5})
+        .escape(),
+    body("price")
+        .notEmpty()
+        .withMessage("Price cannot be empty")
+        .isInt({min :1})
+        .withMessage("Price cannot be less than 1"),
+    body("in_stock")
+        .isInt({min:0})
+        .withMessage("Minimum is 0 cannot input a negative  value")
+    ,asyncHandler(async (req,res,next) => {
+
+    const errors = validationResult(req)
+
+    const item = new Item ({
+        name: req.body.name,
+        category: req.body.category,
+        description: req.body.description,
+        price: req.body.price,
+        in_stock: req.body.in_stock,
+        _id : req.params.id
+    }) 
+
+    if(!errors.isEmpty()){
+        const categories = await Category.find().exec()
+
+        res.render("item_form", {
+            title: "Update Item: " + req.params.id,
+            categories, 
+            item,
+            errors:errors.array()
+        })
+
+    }else{
+
+        const updatedItem = await Item.findByIdAndUpdate(req.params.id, item, {})
+
+        res.redirect(updatedItem.url)
+    }
+    
+
+})]
 
 exports.item_delete_get = asyncHandler(async (req,res,next) => {
     res.send("Item delete page NOT IMPLEMENTED")

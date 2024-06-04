@@ -11,14 +11,10 @@ router.get('/', item.index)
 
 router.get('/category/create', category.category_create_get)
 
-router.post('/category/create',(req,res) =>{
-    res.send("category created")
-})
+router.post('/category/create',category.category_create_post)
 
 router.get('/category/:id/update',category.category_update_get)
-router.post('/category/:id/update',(req,res)=>{
-    res.send('category updated')
-})
+router.post('/category/:id/update',category.category_update_post)
 
 router.get('/category/:id/delete',(req,res)=>{
     res.send('category delete form')
@@ -35,14 +31,11 @@ router.get('/categories', category.categories_list)
 // Item Routes 
 router.get('/item/create',item.item_create_get)
 
-router.post('/item/create',(req,res) =>{
-    res.send("item created")
-})
+router.post('/item/create',item.item_create_post)
 
 router.get('/item/:id/update',item.item_update_get)
-router.post('/item/:id/update',(req,res)=>{
-    res.send('item create form')
-})
+
+router.post('/item/:id/update',item.item_update_post)
 
 router.get('/item/:id/delete',(req,res)=>{
     res.send('category delete form')
