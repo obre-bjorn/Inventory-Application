@@ -178,10 +178,27 @@ exports.item_update_post = [
 })]
 
 exports.item_delete_get = asyncHandler(async (req,res,next) => {
-    res.send("Item delete page NOT IMPLEMENTED")
+    
+    const item = await Item.findById(req.params.id).populate("category").exec()
+
+    if (item === null){
+
+        res.redirect('/inventory/items')
+    }
+
+    res.render('item_delete', {
+        title: 'Delete Item',
+        item
+    })
+
+
 })
 
 exports.item_delete_post = asyncHandler(async (req,res,next) => {
-    res.send("Item delete post NOT IMPLEMENTED")
+
+    await Item.findByIdAndDelete(req.body.itemid).exec()
+
+    res.redirect('/inventory/items')
+
 })
 

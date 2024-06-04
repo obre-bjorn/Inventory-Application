@@ -131,9 +131,43 @@ exports.category_update_post = [
 })]
 
 exports.category_delete_get = asyncHandler(async (req,res,next) => {
-    res.send("Categeory delete page NOT IMPLEMENTED")
+
+    const [category,category_items ] = await Promise.all([
+        Category.findById(req.params.id).exec(),
+        Item.find({category: req.params.id}).exec()
+    ])
+     
+
+   res.render("category_delete",{
+    title: 'Delete category',
+    category,
+    category_items
+
+   })
 })
 
 exports.category_delete_post = asyncHandler(async (req,res,next) => {
-    res.send("Categeory delete post NOT IMPLEMENTED")
+
+
+    const [category,category_items] = await Promise.all([
+        Category.findById(req.params.id).exec(),
+        Item.find({category : req.params.id}).populate('category').exec()
+    ])
+
+    if(category_items.length > 0){
+
+        res.render('category_delete',{
+            title: 'Delete category',
+            category,
+            category_items
+        })
+
+
+    }
+
+    await Category.findByIdAndDelete(req.body.categoryid).exec()
+
+    res.redirect('/inventory/categories')
+
+
 })
